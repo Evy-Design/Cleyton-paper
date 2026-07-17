@@ -4,13 +4,13 @@
 // 4. Copy the firebaseConfig object it gives you and paste the values below.
 
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY_HERE",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID",
+  apiKey: "AIzaSyCQg_TCGsIMrwfBs86QF5kUimJSWTd4FBs",
+  authDomain: "cleyton-paper.firebaseapp.com",
+  projectId: "cleyton-paper",
+  storageBucket: "cleyton-paper.firebasestorage.app",
+  messagingSenderId: "412885167654",
+  appId: "1:412885167654:web:c0afebc5a0c2c664fd80e7",
 };
-
+ 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
