@@ -364,7 +364,7 @@ function underlineButton(label, sub, onClick) {
 }
 function backLink(label, onClick, opts) {
   const onDark = opts && opts.onDark;
-  return h("button", { class: "back-link" + (onDark ? " on-dark" : ""), onclick: onClick }, [icon("arrow"), label]);
+  return h("button", { class: "back-link" + (onDark ? " on-dark" : ""), onclick: onClick }, [icon("arrow"), label, icon("arrow", { flip: true })]);
 }
 
 function render() {
@@ -442,7 +442,7 @@ function buildSplitScriptTitle(title) {
 
 function buildHome() {
   const wrap = h("div", { class: "narrow", style: "max-width:480px" });
-  const cardSize = state.user ? "min-height:663px" : "aspect-ratio:480/613";
+  const cardSize = state.user ? "min-height:663px" : "height:627px";
   const card = h("div", { class: "paper-card hero-card " + (state.user ? "member" : "guest"), style: `max-width:480px;${cardSize};overflow:visible` });
   const anchor = new Date(state.config.anchorDate);
   const currentIndex = editionIndexFor(new Date(), anchor);
@@ -458,8 +458,10 @@ function buildHome() {
     intro.appendChild(h("p", { class: "paper-lede" }, [t("home_intro", { name: state.config.recipientName })]));
     left.appendChild(intro);
   } else {
-    left.appendChild(h("p", { class: "paper-lede", style: "margin:0 0 15px" }, [state.config.tagline]));
-    left.appendChild(buildSplitScriptTitle(state.config.mastheadTitle));
+    const intro = h("div", { class: "hero-guest-intro" });
+    intro.appendChild(h("p", { class: "paper-lede" }, [state.config.tagline]));
+    intro.appendChild(buildSplitScriptTitle(state.config.mastheadTitle));
+    left.appendChild(intro);
   }
 
   const actions = h("div", { class: "hero-actions" });
@@ -476,7 +478,7 @@ function buildHome() {
     secondaryActions.appendChild(underlineButton(t("home_login"), null, () => { resetLogin(); state.view = "login"; render(); }));
     secondaryActions.appendChild(underlineButton(t("home_register"), null, () => { resetRegister(); state.view = "register"; render(); }));
     actions.appendChild(secondaryActions);
-    actions.appendChild(pillButton(t("home_view_week"), () => { state.view = "papers"; render(); }));
+    actions.appendChild(pillButton(t("home_view_week"), () => { state.view = "papers"; render(); }, { noArrow: true }));
   }
   left.appendChild(actions);
   split.appendChild(left);
@@ -1072,7 +1074,7 @@ function buildAdminStories() {
   const i = adminState.papersSelected != null ? adminState.papersSelected : currentIndex;
   const isOpen = i === currentIndex;
   const wrap = h("div", {});
-  wrap.appendChild(h("button", { class: "back-link", onclick: () => { adminState.section = "papers"; render(); } }, [icon("arrow"), t("go_back_papers")]));
+  wrap.appendChild(backLink(t("go_back_papers"), () => { adminState.section = "papers"; render(); }));
 
   const header = h("div", { class: "admin-header" });
   header.appendChild(h("h1", { class: "admin-title" }, [t("admin_stories_title", { n: i + 1 })]));
