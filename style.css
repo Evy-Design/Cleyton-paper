@@ -74,7 +74,7 @@ a { color: inherit; }
 .pill-btn {
   background: none; border: 1px solid var(--border-on-dark); color: var(--body-on-dark); padding: 8px 19px;
   border-radius: var(--radius-pill); font-family: 'Cormorant Garamond', serif; font-size: 15px; letter-spacing: 0.5px;
-  cursor: pointer; text-align: center;
+  cursor: pointer; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
 }
 .pill-btn:hover { background: rgba(232,232,224,0.08); border-width: 2px; border-color: var(--fg-on-dark); }
 
@@ -114,18 +114,19 @@ a { color: inherit; }
   padding: 30px;
   color: var(--body-text);
 }
-.paper-card.wide { max-width: 620px; }
-
 .back-link {
   background: none; border: none; color: var(--body-text); font-family: 'Cormorant Garamond', serif;
   cursor: pointer; font-size: 16px; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 10px;
-  padding: 10px; filter: drop-shadow(0 2px 5px rgba(58,43,30,0.08));
+  padding: 10px;
 }
 .back-link img { width: 14px; height: 14px; }
 .back-link:hover { color: var(--fg-primary); }
+.back-link.on-dark { color: var(--body-on-dark); }
+.back-link.on-dark:hover { color: var(--fg-on-dark); }
 
 .script-title { font-family: 'Pinyon Script', cursive; color: var(--display); line-height: 0.87; margin: 0; }
 .script-title.xl { font-size: clamp(44px, 9vw, 84px); }
+.script-title.md { font-size: clamp(38px, 7.5vw, 70px); line-height: 0.93; }
 .script-title.lg { font-size: clamp(36px, 7vw, 64px); }
 
 .paper-lede { font-family: 'Cutive Mono', monospace; font-size: 16px; color: var(--body-text); line-height: 1.4; margin: 12px 0 0; }
@@ -146,7 +147,7 @@ textarea.text-input { min-height: 160px; resize: vertical; border-radius: 4px; }
 .pill-btn-primary {
   border: 1px solid var(--border-primary); background: none; color: var(--body-text); font-family: 'Cormorant Garamond', serif;
   font-size: 16px; padding: 11px 21px; border-radius: var(--radius-pill); cursor: pointer;
-  box-shadow: 0 2px 10px rgba(58,43,30,0.08); display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex; align-items: center; gap: 10px;
 }
 .pill-btn-primary:hover:not(:disabled) { border-width: 2px; border-color: var(--fg-primary); }
 .pill-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
@@ -155,11 +156,12 @@ textarea.text-input { min-height: 160px; resize: vertical; border-radius: 4px; }
 
 .underline-btn {
   border: none; border-bottom: 1px solid var(--border-primary); background: none; color: var(--body-text);
-  font-family: 'Cormorant Garamond', serif; font-size: 19px; cursor: pointer; padding: 10px;
-  display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 2px 10px rgba(58,43,30,0.08);
+  cursor: pointer; padding: 10px;
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: 6px;
 }
 .underline-btn:hover:not(:disabled) { border-bottom-width: 2px; border-bottom-color: var(--fg-primary); }
-.underline-btn small { display: block; font-family: 'Cutive Mono', monospace; font-size: 12px; margin-top: 6px; font-weight: normal; }
+.underline-btn-row { display: flex; align-items: center; gap: 10px; font-family: 'Cormorant Garamond', serif; font-size: 19px; }
+.underline-btn small { display: block; font-family: 'Cutive Mono', monospace; font-size: 12px; font-weight: normal; }
 .underline-btn img { width: 14px; height: 14px; }
 
 .error-text { color: var(--display); font-size: 14px; margin: -10px 0 14px; font-family: 'Cutive Mono', monospace; }
