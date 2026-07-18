@@ -17,6 +17,7 @@ const STRINGS = {
     cancel: "Cancel", save: "Save", go_back: "Go back",
 
     home_cta_submit: "Submit a story", home_cta_submit_sub: "For family & friends",
+    home_login: "Log in", home_register: "Make an account", home_view_week: "View paper of this week",
 
     home_hi: "Hi, {{name}}", home_intro: "You are part of {{name}}'s digital paper, write some fun stories for {{name}}",
     deadline_pill: "Deadline next paper: {{date}}",
@@ -97,6 +98,7 @@ const STRINGS = {
     cancel: "Cancelar", save: "Guardar", go_back: "Voltar",
 
     home_cta_submit: "Enviar uma história", home_cta_submit_sub: "Para família & amigos",
+    home_login: "Entrar", home_register: "Criar uma conta", home_view_week: "Ver jornal desta semana",
 
     home_hi: "Olá, {{name}}", home_intro: "Fazes parte do jornal digital de {{name}}, escreve algumas histórias divertidas para {{name}}",
     deadline_pill: "Prazo do próximo jornal: {{date}}",
@@ -440,7 +442,8 @@ function buildSplitScriptTitle(title) {
 
 function buildHome() {
   const wrap = h("div", { class: "narrow", style: "max-width:480px" });
-  const card = h("div", { class: "paper-card", style: "max-width:480px;aspect-ratio:480/616;overflow:visible" });
+  const cardSize = state.user ? "min-height:663px" : "aspect-ratio:480/613";
+  const card = h("div", { class: "paper-card hero-card " + (state.user ? "member" : "guest"), style: `max-width:480px;${cardSize};overflow:visible` });
   const anchor = new Date(state.config.anchorDate);
   const currentIndex = editionIndexFor(new Date(), anchor);
   const end = editionEnd(currentIndex, anchor);
@@ -449,9 +452,11 @@ function buildHome() {
   const left = h("div", { class: "hero-left" });
 
   if (state.user) {
-    left.appendChild(h("div", { style: "color:var(--display);font-family:'Cutive Mono',monospace;font-size:12px;padding:10px 10px 6px" }, [t("deadline_pill", { date: fmtShort(end) })]));
-    left.appendChild(h("p", { class: "script-title md" }, [t("home_hi", { name: state.user.name })]));
-    left.appendChild(h("p", { class: "paper-lede" }, [t("home_intro", { name: state.config.recipientName })]));
+    left.appendChild(h("div", { class: "deadline-pill" }, [t("deadline_pill", { date: fmtShort(end) })]));
+    const intro = h("div", { class: "hero-member-intro" });
+    intro.appendChild(h("p", { class: "script-title md" }, [t("home_hi", { name: state.user.name })]));
+    intro.appendChild(h("p", { class: "paper-lede" }, [t("home_intro", { name: state.config.recipientName })]));
+    left.appendChild(intro);
   } else {
     left.appendChild(h("p", { class: "paper-lede", style: "margin:0 0 15px" }, [state.config.tagline]));
     left.appendChild(buildSplitScriptTitle(state.config.mastheadTitle));
@@ -459,12 +464,20 @@ function buildHome() {
 
   const actions = h("div", { class: "hero-actions" });
   if (state.user) {
-    actions.appendChild(underlineButton(t("home_cta_submit"), null, () => { resetSubmit(); state.view = "submit"; render(); }));
-    actions.appendChild(underlineButton(t("action_mystories"), t("action_mystories_sub"), () => { resetMyStories(); state.view = "mystories"; render(); }));
+    const submitButton = pillButton(t("home_cta_submit"), () => { resetSubmit(); state.view = "submit"; render(); });
+    submitButton.classList.add("hero-primary");
+    actions.appendChild(submitButton);
+    const secondaryActions = h("div", { class: "hero-secondary-actions" });
+    secondaryActions.appendChild(underlineButton(t("action_mystories"), t("action_mystories_sub"), () => { resetMyStories(); state.view = "mystories"; render(); }));
+    secondaryActions.appendChild(underlineButton(t("action_paperweek"), t("action_paperweek_sub", { date: fmtShort(end) }), () => { state.view = "papers"; render(); }));
+    actions.appendChild(secondaryActions);
   } else {
-    actions.appendChild(underlineButton(t("home_cta_submit"), t("home_cta_submit_sub"), () => { resetLogin(); state.view = "login"; render(); }));
+    const secondaryActions = h("div", { class: "hero-secondary-actions" });
+    secondaryActions.appendChild(underlineButton(t("home_login"), null, () => { resetLogin(); state.view = "login"; render(); }));
+    secondaryActions.appendChild(underlineButton(t("home_register"), null, () => { resetRegister(); state.view = "register"; render(); }));
+    actions.appendChild(secondaryActions);
+    actions.appendChild(pillButton(t("home_view_week"), () => { state.view = "papers"; render(); }));
   }
-  actions.appendChild(underlineButton(t("action_paperweek"), t("action_paperweek_sub", { date: fmtShort(end) }), () => { state.view = "papers"; render(); }));
   left.appendChild(actions);
   split.appendChild(left);
   split.appendChild(buildCollage());
