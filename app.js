@@ -360,8 +360,9 @@ function underlineButton(label, sub, onClick) {
   if (sub) btn.appendChild(h("small", {}, [sub]));
   return btn;
 }
-function backLink(label, onClick) {
-  return h("button", { class: "back-link", onclick: onClick }, [icon("arrow"), label]);
+function backLink(label, onClick, opts) {
+  const onDark = opts && opts.onDark;
+  return h("button", { class: "back-link" + (onDark ? " on-dark" : ""), onclick: onClick }, [icon("arrow"), label]);
 }
 
 function render() {
@@ -449,7 +450,7 @@ function buildHome() {
 
   if (state.user) {
     left.appendChild(h("div", { style: "color:var(--display);font-family:'Cutive Mono',monospace;font-size:12px;padding:10px 10px 6px" }, [t("deadline_pill", { date: fmtShort(end) })]));
-    left.appendChild(h("p", { class: "script-title xl" }, [t("home_hi", { name: state.user.name })]));
+    left.appendChild(h("p", { class: "script-title md" }, [t("home_hi", { name: state.user.name })]));
     left.appendChild(h("p", { class: "paper-lede" }, [t("home_intro", { name: state.config.recipientName })]));
   } else {
     left.appendChild(h("p", { class: "paper-lede", style: "margin:0 0 15px" }, [state.config.tagline]));
@@ -488,8 +489,8 @@ function buildCollage() {
 
 /* ---------- Login ---------- */
 function buildLogin() {
-  const wrap = h("div", { class: "narrow" });
-  const card = h("div", { class: "paper-card" });
+  const wrap = h("div", { class: "narrow", style: "max-width:480px" });
+  const card = h("div", { class: "paper-card", style: "max-width:480px" });
   card.appendChild(backLink(t("go_back"), () => { state.view = "home"; render(); }));
   card.appendChild(h("p", { class: "script-title xl" }, [t("login_title")]));
   card.appendChild(h("p", { class: "paper-lede" }, [t("login_lede", { name: state.config.recipientName })]));
@@ -538,10 +539,10 @@ async function doLogin() {
 
 /* ---------- Register ---------- */
 function buildRegister() {
-  const wrap = h("div", { class: "narrow" });
-  const card = h("div", { class: "paper-card" });
+  const wrap = h("div", { class: "narrow", style: "max-width:480px" });
+  const card = h("div", { class: "paper-card", style: "max-width:480px" });
   card.appendChild(backLink(t("go_back"), () => { state.view = "login"; render(); }));
-  card.appendChild(h("p", { class: "script-title xl" }, [t("register_title")]));
+  card.appendChild(h("p", { class: "script-title md" }, [t("register_title")]));
   card.appendChild(h("p", { class: "paper-lede" }, [t("register_lede", { name: state.config.recipientName })]));
   card.appendChild(h("hr", { class: "paper-hr" }));
 
@@ -609,8 +610,8 @@ function buildSubmit() {
   const deadline = editionDeadline(editionIndex, anchor);
   const locked = new Date() > deadline;
 
-  const wrap = h("div", { class: "narrow" });
-  const card = h("div", { class: "paper-card wide" });
+  const wrap = h("div", { class: "narrow", style: "max-width:580px" });
+  const card = h("div", { class: "paper-card", style: "max-width:580px" });
   card.appendChild(backLink(t("go_back"), () => { state.view = "home"; render(); }));
   card.appendChild(h("p", { class: "script-title lg" }, [t("submit_title")]));
   card.appendChild(h("p", { class: "paper-lede" }, [t("submit_lede", { name: state.config.recipientName })]));
@@ -641,7 +642,7 @@ function buildSubmit() {
 
   if (!locked) {
     const row = h("div", { style: "display:flex;gap:16px;align-items:center;justify-content:flex-end;flex-wrap:wrap" });
-    if (submitState.savedAt) row.appendChild(h("button", { class: "underline-btn", style: "box-shadow:none", onclick: () => deleteMySubmission(editionIndex) }, [h("span", { class: "underline-btn-row" }, [t("delete_submission")])]));
+    if (submitState.savedAt) row.appendChild(h("button", { class: "underline-btn", onclick: () => deleteMySubmission(editionIndex) }, [h("span", { class: "underline-btn-row" }, [t("delete_submission")])]));
     row.appendChild(pillButton(submitState.savedAt ? t("btn_update_story") : t("btn_submit_story"), () => submitStory(editionIndex, end)));
     card.appendChild(row);
   }
@@ -700,8 +701,8 @@ async function deleteMySubmission(editionIndex) {
 
 /* ---------- All my stories ---------- */
 function buildMyStories() {
-  const wrap = h("div", { class: "narrow" });
-  const card = h("div", { class: "paper-card wide" });
+  const wrap = h("div", { class: "narrow", style: "max-width:620px" });
+  const card = h("div", { class: "paper-card", style: "max-width:620px" });
   card.appendChild(backLink(t("go_back"), () => { state.view = "home"; render(); }));
   card.appendChild(h("p", { class: "script-title lg" }, [t("mystories_title")]));
   card.appendChild(h("p", { class: "paper-lede" }, [t("mystories_lede", { name: state.config.recipientName })]));
@@ -763,8 +764,8 @@ function buildViewStoryModal() {
 function buildPapers() {
   const anchor = new Date(state.config.anchorDate);
   const currentIndex = editionIndexFor(new Date(), anchor);
-  const wrap = h("div", { class: "narrow" });
-  const card = h("div", { class: "paper-card wide", style: "max-width:960px" });
+  const wrap = h("div", { class: "narrow", style: "max-width:1020px" });
+  const card = h("div", { class: "paper-card", style: "max-width:1020px" });
   card.appendChild(backLink(t("go_back"), () => { state.view = "home"; render(); }));
   card.appendChild(h("p", { class: "script-title lg" }, [t("papers_title")]));
   card.appendChild(h("hr", { class: "paper-hr" }));
@@ -809,11 +810,11 @@ async function openReading(index, returnView) {
 }
 function buildReading() {
   const anchor = new Date(state.config.anchorDate);
-  const wrap = h("div", { class: "narrow", style: "max-width:960px" });
+  const wrap = h("div", { class: "narrow", style: "max-width:1020px" });
   wrap.appendChild(backLink(t("go_back"), () => {
     if (readingState.returnView === "admin") { state.view = "admin"; adminState.section = "papers"; render(); }
     else { state.view = readingState.returnView; render(); }
-  }));
+  }, { onDark: true }));
   if (readingState.loading) { wrap.appendChild(h("p", {}, [h("em", {}, [t("loading")])])); return wrap; }
   const i = readingState.index;
   const start = editionStart(i, anchor), end = editionEnd(i, anchor);
