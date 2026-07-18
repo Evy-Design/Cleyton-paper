@@ -2,7 +2,7 @@
 const EDITION_MS = 14 * 24 * 60 * 60 * 1000;
 const DEFAULT_CONFIG = {
   mastheadTitle: "Cleytons Paper",
-  tagline: "News from the lives of family & friends, scattered across the world",
+  tagline: "Updates and stories from the lives of family & friends, every two weeks ",
   recipientName: "Cleyton",
   anchorDate: new Date().toISOString(),
   editionOverrideIndex: null,
