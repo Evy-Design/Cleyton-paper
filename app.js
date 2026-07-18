@@ -17,7 +17,7 @@ const STRINGS = {
     cancel: "Cancel", save: "Save", go_back: "Go back",
 
     home_cta_submit: "Submit a story", home_cta_submit_sub: "For family & friends",
-    home_login: "Log in", home_register: "Make an account", home_view_week: "View paper of this week",
+    home_login: "Log in", home_register: "Make an account", home_view_week: "View paper of this week", home_view_papers: "View papers",
 
     home_hi: "Hi, {{name}}", home_intro: "You are part of {{name}}'s digital paper, write some fun stories for {{name}}",
     deadline_pill: "Deadline next paper: {{date}}",
@@ -98,7 +98,7 @@ const STRINGS = {
     cancel: "Cancelar", save: "Guardar", go_back: "Voltar",
 
     home_cta_submit: "Enviar uma história", home_cta_submit_sub: "Para família & amigos",
-    home_login: "Entrar", home_register: "Criar uma conta", home_view_week: "Ver jornal desta semana",
+    home_login: "Entrar", home_register: "Criar uma conta", home_view_week: "Ver jornal desta semana", home_view_papers: "Ver jornais",
 
     home_hi: "Olá, {{name}}", home_intro: "Fazes parte do jornal digital de {{name}}, escreve algumas histórias divertidas para {{name}}",
     deadline_pill: "Prazo do próximo jornal: {{date}}",
@@ -364,7 +364,7 @@ function underlineButton(label, sub, onClick) {
 }
 function backLink(label, onClick, opts) {
   const onDark = opts && opts.onDark;
-  return h("button", { class: "back-link" + (onDark ? " on-dark" : ""), onclick: onClick }, [icon("arrow"), label, icon("arrow", { flip: true })]);
+  return h("button", { class: "back-link" + (onDark ? " on-dark" : ""), onclick: onClick }, [icon("arrow"), label]);
 }
 
 function render() {
@@ -380,7 +380,7 @@ function render() {
   const site = h("div", { class: "site" });
   if (!firebaseReady()) site.appendChild(h("div", { class: "fb-warning" }, [t("firebase_warning")]));
   site.appendChild(buildTopbar());
-  const page = h("div", { class: "page" });
+  const page = h("div", { class: "page" + (state.view === "home" ? " home-page" : "") });
   if (state.view === "home") page.appendChild(buildHome());
   else if (state.view === "login") page.appendChild(buildLogin());
   else if (state.view === "register") page.appendChild(buildRegister());
@@ -459,8 +459,8 @@ function buildHome() {
     left.appendChild(intro);
   } else {
     const intro = h("div", { class: "hero-guest-intro" });
-    intro.appendChild(h("p", { class: "paper-lede" }, [state.config.tagline]));
     intro.appendChild(buildSplitScriptTitle(state.config.mastheadTitle));
+    intro.appendChild(h("p", { class: "paper-lede" }, [state.config.tagline]));
     left.appendChild(intro);
   }
 
@@ -478,7 +478,10 @@ function buildHome() {
     secondaryActions.appendChild(underlineButton(t("home_login"), null, () => { resetLogin(); state.view = "login"; render(); }));
     secondaryActions.appendChild(underlineButton(t("home_register"), null, () => { resetRegister(); state.view = "register"; render(); }));
     actions.appendChild(secondaryActions);
-    actions.appendChild(pillButton(t("home_view_week"), () => { state.view = "papers"; render(); }, { noArrow: true }));
+    actions.appendChild(pillButton(h("span", { class: "home-view-label" }, [
+      h("span", { class: "desktop-label" }, [t("home_view_week")]),
+      h("span", { class: "mobile-label" }, [t("home_view_papers")]),
+    ]), () => { state.view = "papers"; render(); }, { noArrow: true }));
   }
   left.appendChild(actions);
   split.appendChild(left);
